@@ -2,84 +2,77 @@ package com.ten.dmitry.locationapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 
-public class ChooseRouteActivity extends AppCompatActivity {
-    private ListView listView;
-    private ArrayAdapter<String> adapter;
-    public static final String SELECTED_ROUTE = "ChooseRouteActivityRoute";
-    private ArrayList<String> routeNames;
-    protected int numItems;
-    ChooseRouteAdapter crAdapter;
-    ViewPager viewPager;
+public class ChooseRouteActivity extends BaseRouteActivity{
+    public static final String SELECTED_ROUTE_USER = "ChooseRouteActivityRoute";
+    public static final String TAG = "ManageRoute:";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_choose_route2);
-        routeNames = new ArrayList<>();
-        routeNames.add("Washroom");
-        routeNames.add("Sink");
-        numItems = routeNames.size();
-        // TODO: Extract possible route names from the saved data in the admin section
-
-        // ViewPager and its adapters use support library
-        // fragments, so use getSupportFragmentManager.
-        crAdapter =
-                new ChooseRouteAdapter(getSupportFragmentManager());
-        viewPager = (ViewPager) findViewById(R.id.pager);
-        viewPager.setAdapter(crAdapter);
     }
 
-    public class ChooseRouteAdapter extends FragmentPagerAdapter{
-
-        public ChooseRouteAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            Fragment fragment = new ChooseRouteFragment();
-            Bundle args = new Bundle();
-            args.putString(ChooseRouteFragment.ARG_OBJECT, routeNames.get(position));
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public int getCount() {
-            return numItems;
-        }
+    public void listItemClick(View view) {
+        int pos = listView.getPositionForView(view);
+        String selectedRouteName = adapter.getItem(pos);
+        Intent startRouteIntent = new Intent(this, ExecuteRouteActivity.class);
+        startRouteIntent.putExtra(SELECTED_ROUTE_USER, selectedRouteName);
+        startActivity(startRouteIntent);
     }
 
-    // Instances of this class are fragments representing a single
-// object in our collection.
-    public static class ChooseRouteFragment extends Fragment {
-        public static final String ARG_OBJECT = "object";
+    public void onResume() {
+        super.onResume();
+        String ret = "";
 
-        @Override
-        public View onCreateView(LayoutInflater inflater,
-                                 ViewGroup container, Bundle savedInstanceState) {
-            // The last two arguments ensure LayoutParams are inflated
-            // properly.
-            View rootView = inflater.inflate(
-                    R.layout.activity_choose_route2, container, false);
-            Bundle args = getArguments();
-            ((TextView) rootView.findViewById(android.R.id.text1)).setText(args.getString(ARG_OBJECT));
-            return rootView;
+        try {
+            InputStream inputStream = openFileInput("Routes.txt");
+
+            if (inputStream != null) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ((receiveString = bufferedReader.readLine()) != null) {
+                    Log.d(TAG, receiveString);
+                    String[] split1 = receiveString.split("\\.");
+                    String name = split1[1];
+                    List<Integer> majorList = new ArrayList<>();
+                    String[] split2 = split1[0].split(",");
+                    String[] messages = new String[split2.length];
+                    for (int i = 0; i < split2.length; i++) {
+                        String[] split3 = split2[i].split("/");
+                        majorList.add(Integer.parseInt(split3[0]));
+                        messages[i] = split3[1];
+                    }
+                    int i;
+                    for (i = 0; i < adapter.getCount(); i++)
+                        if (adapter.getItem(i).equals(name))
+                            break;
+                    if (i == adapter.getCount())
+                        adapter.add(name);
+                }
+
+                inputStream.close();
+                ret = stringBuilder.toString();
+            }
+        } catch (FileNotFoundException e) {
+            Log.e("login activity", "File not found: " + e.toString());
+        } catch (IOException e) {
+            Log.e("login activity", "Can not read file: " + e.toString());
         }
+        Log.d(TAG, ret);
     }
+
 }
 

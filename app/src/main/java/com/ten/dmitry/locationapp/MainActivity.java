@@ -7,27 +7,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.estimote.sdk.BeaconManager;
-import com.estimote.sdk.Region;
-
 public class MainActivity extends AppCompatActivity {
-    private BeaconManager beaconManager;
-    private RouteManager routeManager;
-    private Region beaconRegion;
-    private int selectedMajor, selectedMinor;
-    private final int REQUEST_BEACON_ACTIVITY_RESPONSE = 1;
-    public final String TAG = "MainActivityTag";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-    }
-
-    @Override
-    public void onDestroy() {
-        beaconManager.disconnect();
-        super.onDestroy();
     }
 
     @Override

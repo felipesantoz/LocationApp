@@ -10,6 +10,10 @@
         <item>Turn Right</item>
         <item>Turn Left</item>
         <item>Keep going forward</item>
+        <item>You have reached your destination</item>
         <item>Cancel</item>
     </string-array>
+    <string name="major">Major: </string>
+    <string name="finish_route">Done</string>
+    <string name="routename_hint">Enter route name...</string>
 </resources>
