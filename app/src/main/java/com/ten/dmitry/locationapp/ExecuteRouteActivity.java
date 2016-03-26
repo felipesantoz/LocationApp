@@ -1,11 +1,12 @@
 package com.ten.dmitry.locationapp;
 
 import android.annotation.TargetApi;
+/*
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
+import android.content.Intent;*/
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
@@ -41,7 +42,6 @@ public class ExecuteRouteActivity extends AppCompatActivity implements BeaconMan
         nextMajor = route.getNextBeaconMajor();
 
         ttsObject = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-
 
             @Override
             public void onInit(int status) {
@@ -80,6 +80,7 @@ public class ExecuteRouteActivity extends AppCompatActivity implements BeaconMan
         beaconManager.startRanging(region);
     }
 
+    /*
     public void showNotification(String title, String message) {
         Intent notifyIntent = new Intent(this, MainActivity.class);
         notifyIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -96,7 +97,7 @@ public class ExecuteRouteActivity extends AppCompatActivity implements BeaconMan
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(1, notification);
-    }
+    }*/
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -126,8 +127,7 @@ public class ExecuteRouteActivity extends AppCompatActivity implements BeaconMan
         if (ratio < 1.0) {
             return Math.pow(ratio, 10);
         } else {
-            double accuracy = (0.89976) * Math.pow(ratio, 7.7095) + 0.111;
-            return accuracy;
+            return (0.89976) * Math.pow(ratio, 7.7095) + 0.111;
         }
     }
 
