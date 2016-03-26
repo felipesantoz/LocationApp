@@ -1,5 +1,6 @@
 package com.ten.dmitry.locationapp;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -10,6 +11,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,9 +23,11 @@ import com.estimote.sdk.Region;
 import java.util.List;
 import java.util.UUID;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements BeaconManager.MonitoringListener{
     private BeaconManager beaconManager;
-
+    private Region beaconRegion;
+    private int selectedMajor, selectedMinor;
+    private final int REQUEST_BEACON_ACTIVITY_RESPONSE = 1;
     public final String TAG = "MainActivityTag";
 
     @Override
@@ -44,33 +48,12 @@ public class MainActivity extends AppCompatActivity {
 
         beaconManager = new BeaconManager(getApplicationContext());
 
-        beaconManager.setMonitoringListener(new BeaconManager.MonitoringListener() {
-            @Override
-            public void onEnteredRegion(Region region, List<Beacon> list) {
-                showNotification(
-                        "Beacon Found",
-                        "");
-            }
-
-            @Override
-            public void onExitedRegion(Region region) {
-                showNotification("Beacon lost", "");
-            }
-        });
+        beaconManager.setMonitoringListener(this);
     }
 
     @Override
     public void onStart(){
         super.onStart();
-        beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
-            @Override
-            public void onServiceReady() {
-                beaconManager.startMonitoring(new Region(
-                        "monitored region",
-                        UUID.fromString("B9407F30-F5F8-466E-AFF9-25556B57FE6D"),
-                        9652, 37519));
-            }
-        });
     }
 
     @Override
@@ -124,8 +107,40 @@ public class MainActivity extends AppCompatActivity {
         notificationManager.notify(1, notification);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_BEACON_ACTIVITY_RESPONSE && resultCode == Activity.RESULT_OK) {
+            int[] ID = data.getIntArrayExtra(ChooseBeaconActivity.SELECTED_BEACON);
+            selectedMajor = ID[0];
+            selectedMinor = ID[1];
+            Log.d(TAG, "" + selectedMajor + " " + selectedMinor);
+            beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
+                @Override
+                public void onServiceReady() {
+                    beaconManager.startMonitoring(new Region(
+                            "monitored region",
+                            UUID.fromString("B9407F30-F5F8-466E-AFF9-25556B57FE6D"),
+                            selectedMajor, selectedMinor));
+                }
+            });
+        }
+    }
+
     public void chooseBeacon(View view) {
         Intent intent = new Intent(this, ChooseBeaconActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_BEACON_ACTIVITY_RESPONSE);
+    }
+
+    @Override
+    public void onEnteredRegion(Region region, List<Beacon> list) {
+        showNotification(
+                "Beacon Found",
+                "Major: "+ list.get(0).getMajor());
+    }
+
+    @Override
+    public void onExitedRegion(Region region) {
+        showNotification("Beacon lost", "");
     }
 }

@@ -41,7 +41,6 @@ public class ChooseBeaconActivity extends AppCompatActivity implements BeaconMan
 
         beaconSet = new ArrayList<>();
         ArrayList<String> beaconsIds = new ArrayList<>();
-        beaconsIds.add("");
         listView = (ListView) findViewById(R.id.list_view);
         listView.getHeight();
         adapter = new ArrayAdapter<>(this, R.layout.list_view_item, beaconsIds);
