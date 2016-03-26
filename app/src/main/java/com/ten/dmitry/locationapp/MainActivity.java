@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
         beaconManager = new BeaconManager(getApplicationContext());
 
         beaconManager.setMonitoringListener(new BeaconManager.MonitoringListener() {
@@ -121,5 +122,10 @@ public class MainActivity extends AppCompatActivity {
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(1, notification);
+    }
+
+    public void chooseBeacon(View view) {
+        Intent intent = new Intent(this, ChooseBeaconActivity.class);
+        startActivity(intent);
     }
 }

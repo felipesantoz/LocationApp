@@ -21,7 +21,8 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main" />
+    <include layout="@layout/content_main"
+        android:id="@+id/hello_world" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -31,4 +32,15 @@
         android:layout_margin="@dimen/fab_margin"
         android:src="@android:drawable/ic_dialog_email" />
 
+    <Button
+        android:id="@+id/choose_beacon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/choose_beacon"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="100dp"
+        android:onClick="chooseBeacon"
+        />
+
 </android.support.design.widget.CoordinatorLayout>
+
