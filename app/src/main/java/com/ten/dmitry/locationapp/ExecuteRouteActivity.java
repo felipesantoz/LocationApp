@@ -1,24 +1,32 @@
 package com.ten.dmitry.locationapp;
 
+import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
-public class ExecuteRouteActivity extends AppCompatActivity implements BeaconManager.RangingListener{
+public class ExecuteRouteActivity extends AppCompatActivity implements BeaconManager.RangingListener {
     private BeaconManager beaconManager;
     private BeaconRoute route;
     private Integer nextMajor;
+    TextToSpeech ttsObject;
+    int result;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,9 +39,25 @@ public class ExecuteRouteActivity extends AppCompatActivity implements BeaconMan
         RouteManager routeManager = new RouteManager();
         route = routeManager.getRoute(getIntent().getStringExtra(ChooseRouteActivity.SELECTED_ROUTE));
         nextMajor = route.getNextBeaconMajor();
+
+        ttsObject = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+
+
+            @Override
+            public void onInit(int status) {
+
+                if (status == TextToSpeech.SUCCESS)
+                    result = ttsObject.setLanguage(Locale.US);
+
+                else
+                    Toast.makeText(getApplicationContext(), "Feature Not Supported in Your Device", Toast.LENGTH_SHORT).show();
+
+
+            }
+        });
     }
 
-    public void onStart(){
+    public void onStart() {
         super.onStart();
         beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
             @Override
@@ -74,12 +98,16 @@ public class ExecuteRouteActivity extends AppCompatActivity implements BeaconMan
         notificationManager.notify(1, notification);
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onBeaconsDiscovered(Region region, List<Beacon> list) {
         for (Beacon b : list) {
             if (b.getMajor() == nextMajor) {
                 if (calculateAccuracy(b.getMeasuredPower(), b.getRssi()) < 1.8) {
-                    showNotification("Beacon Message", route.getMessage(nextMajor));
+                    if (result == TextToSpeech.LANG_NOT_SUPPORTED || result == TextToSpeech.LANG_MISSING_DATA)
+                        Toast.makeText(getApplicationContext(), "Feature Not Supported in Your Device", Toast.LENGTH_SHORT).show();
+                    else
+                        ttsObject.speak(route.getMessage(nextMajor), TextToSpeech.QUEUE_FLUSH, null, route.getName() + "." + nextMajor);
                     if (!route.hasNext()) {
                         this.finish();
                     } else
