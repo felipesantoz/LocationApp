@@ -7,19 +7,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ChooseBeaconActivity extends AppCompatActivity {
+public class ChooseBeaconActivity extends AppCompatActivity implements BeaconManager.RangingListener{
+
+    private List<Beacon> beaconList;
+    private List<Button> buttonList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_choose_beacon);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -35,14 +40,21 @@ public class ChooseBeaconActivity extends AppCompatActivity {
         // find this line inside the `onCreate` method:
         BeaconManager beaconManager = new BeaconManager(this);
         // add this below:
-        beaconManager.setRangingListener(new BeaconManager.RangingListener() {
-            @Override
-            public void onBeaconsDiscovered(Region region, List<Beacon> list) {
-                for(Beacon beacon : list){
-                    System.out.println(beacon.getProximityUUID().toString());
-                }
-            }
-        });
+        beaconManager.setRangingListener(this);
     }
 
+    @Override
+    public void onBeaconsDiscovered(Region region, List<Beacon> list) {
+        buttonList = new ArrayList<>();
+        RelativeLayout myLayout = new RelativeLayout(this);
+
+        for (Beacon b : list){
+            Button btn = new Button(this);
+            btn.setText(b.getProximityUUID().toString());
+            myLayout.addView(btn);
+        }
+
+        setContentView(myLayout);
+
+    }
 }
