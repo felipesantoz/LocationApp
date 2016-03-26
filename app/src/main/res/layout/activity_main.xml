@@ -41,6 +41,11 @@
         android:layout_margin="100dp"
         android:onClick="chooseBeacon"
         />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/distance"
+        />
 
 </android.support.design.widget.CoordinatorLayout>
 
