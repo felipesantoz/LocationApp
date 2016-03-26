@@ -2,6 +2,8 @@
     <string name="app_name">LocationApp</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_choose_beacon">ChooseBeaconActivity</string>
-    <string name="choose_beacon">CHOOSE BEACON</string>
-    <string name="distance">Distance: </string>
+    <string name="admin_mode">Admin</string>
+    <string name="user_mode">User </string>
+    <string name="title_activity_choose_route">ChooseRouteActivity</string>
+    <string name="create_route">New route</string>
 </resources>
