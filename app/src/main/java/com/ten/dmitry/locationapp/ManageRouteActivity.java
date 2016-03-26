@@ -50,8 +50,8 @@ public class ManageRouteActivity extends AppCompatActivity {
         startActivity(startRouteIntent);
     }
 
-    public void createNewTask(){
-        Intent createRouteIntent = new Intent(this, CreateRoutActivity.class);
+    public void createNewTask(View view){
+        Intent createRouteIntent = new Intent(this, CreateRouteActivity.class);
         startActivity(createRouteIntent);
     }
 }

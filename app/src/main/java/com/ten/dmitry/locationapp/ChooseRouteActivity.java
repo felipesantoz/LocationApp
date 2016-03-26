@@ -30,6 +30,8 @@ public class ChooseRouteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_route2);
         routeNames = new ArrayList<>();
+        routeNames.add("Washroom");
+        routeNames.add("Sink");
         numItems = routeNames.size();
         // TODO: Extract possible route names from the saved data in the admin section
 
@@ -73,7 +75,7 @@ public class ChooseRouteActivity extends AppCompatActivity {
             // The last two arguments ensure LayoutParams are inflated
             // properly.
             View rootView = inflater.inflate(
-                    R.layout.fragment_collection_object, container, false);
+                    R.layout.activity_choose_route2, container, false);
             Bundle args = getArguments();
             ((TextView) rootView.findViewById(android.R.id.text1)).setText(args.getString(ARG_OBJECT));
             return rootView;

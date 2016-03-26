@@ -6,4 +6,10 @@
     <string name="user_mode">User </string>
     <string name="title_activity_choose_route">ChooseRouteActivity</string>
     <string name="create_route">New route</string>
+    <string-array name="options_array">
+        <item>Turn Right</item>
+        <item>Turn Left</item>
+        <item>Keep going forward</item>
+        <item>Cancel</item>
+    </string-array>
 </resources>
