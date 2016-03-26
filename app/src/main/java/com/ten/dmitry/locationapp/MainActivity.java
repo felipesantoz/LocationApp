@@ -23,7 +23,7 @@ import com.estimote.sdk.Region;
 import java.util.List;
 import java.util.UUID;
 
-public class MainActivity extends AppCompatActivity implements BeaconManager.MonitoringListener{
+public class MainActivity extends AppCompatActivity implements BeaconManager.MonitoringListener, BeaconManager.RangingListener{
     private BeaconManager beaconManager;
     private Region beaconRegion;
     private int selectedMajor, selectedMinor;
@@ -118,12 +118,15 @@ public class MainActivity extends AppCompatActivity implements BeaconManager.Mon
             beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
                 @Override
                 public void onServiceReady() {
-                    beaconManager.startMonitoring(new Region(
+                    Region region = new Region(
                             "monitored region",
                             UUID.fromString("B9407F30-F5F8-466E-AFF9-25556B57FE6D"),
-                            selectedMajor, selectedMinor));
+                            selectedMajor, selectedMinor);
+                    beaconManager.startMonitoring(region);
+                    beaconManager.startRanging(region);
                 }
             });
+
         }
     }
 
@@ -134,13 +137,21 @@ public class MainActivity extends AppCompatActivity implements BeaconManager.Mon
 
     @Override
     public void onEnteredRegion(Region region, List<Beacon> list) {
-        showNotification(
-                "Beacon Found",
-                "Major: "+ list.get(0).getMajor());
+        for(Beacon b : list) {
+            if(b.getMajor() == region.getMajor())
+            showNotification(
+                    "Beacon Found",
+                    "Major: " + b.getMajor());
+        }
     }
 
     @Override
     public void onExitedRegion(Region region) {
         showNotification("Beacon lost", "");
+    }
+
+    @Override
+    public void onBeaconsDiscovered(Region region, List<Beacon> list){
+
     }
 }
