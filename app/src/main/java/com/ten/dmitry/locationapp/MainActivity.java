@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Called, when User button is clicked. Starts the intent to the user part of the app.
      */
-    public void userModeSelected() {
+    public void userModeSelected(View view) {
         Intent chooseRouteIntent = new Intent(this, ChooseRouteActivity.class);
         startActivity(chooseRouteIntent);
     }
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Called, when Admin button is clicked. Starts the intent to the administrator part of the app.
      */
-    public void adminModeSelected() {
+    public void adminModeSelected(View view) {
         Intent manageRouteIntent = new Intent(this, ManageRouteActivity.class);
         startActivity(manageRouteIntent);
     }
