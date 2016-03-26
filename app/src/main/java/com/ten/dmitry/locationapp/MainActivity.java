@@ -1,23 +1,29 @@
 package com.ten.dmitry.locationapp;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
-import com.estimote.sdk.Nearable;
+import com.estimote.sdk.Region;
 
 import java.util.List;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
     private BeaconManager beaconManager;
-    private String scanId;
+
     public final String TAG = "MainActivityTag";
 
     @Override
@@ -37,10 +43,17 @@ public class MainActivity extends AppCompatActivity {
         });
         beaconManager = new BeaconManager(getApplicationContext());
 
-        // Discovering nearables
-        beaconManager.setNearableListener(new BeaconManager.NearableListener() {
-            @Override public void onNearablesDiscovered(List<Nearable> nearables) {
-                Log.d(TAG, "Discovered nearables: " + nearables);
+        beaconManager.setMonitoringListener(new BeaconManager.MonitoringListener() {
+            @Override
+            public void onEnteredRegion(Region region, List<Beacon> list) {
+                showNotification(
+                        "Beacon Found",
+                        "");
+            }
+
+            @Override
+            public void onExitedRegion(Region region) {
+                showNotification("Beacon lost", "");
             }
         });
     }
@@ -51,14 +64,16 @@ public class MainActivity extends AppCompatActivity {
         beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
             @Override
             public void onServiceReady() {
-                scanId = beaconManager.startNearableDiscovery();
+                beaconManager.startMonitoring(new Region(
+                        "monitored region",
+                        UUID.fromString("B9407F30-F5F8-466E-AFF9-25556B57FE6D"),
+                        9652, 37519));
             }
         });
     }
 
     @Override
     public void onStop(){
-        beaconManager.stopNearableDiscovery(scanId);
         super.onStop();
     }
 
@@ -88,5 +103,23 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showNotification(String title, String message) {
+        Intent notifyIntent = new Intent(this, MainActivity.class);
+        notifyIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivities(this, 0,
+                new Intent[] { notifyIntent }, PendingIntent.FLAG_UPDATE_CURRENT);
+        Notification notification = new Notification.Builder(this)
+                .setSmallIcon(android.R.drawable.ic_dialog_info)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent)
+                .build();
+        notification.defaults |= Notification.DEFAULT_SOUND;
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(1, notification);
     }
 }
