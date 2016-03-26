@@ -1,8 +1,11 @@
 package com.ten.dmitry.locationapp;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -15,11 +18,12 @@ import java.util.List;
 import java.util.UUID;
 
 public class ChooseBeaconActivity extends AppCompatActivity implements BeaconManager.RangingListener {
-    public static String SELECTED_UUID;
+    public static String SELECTED_BEACON;
     private BeaconManager beaconManager;
     private Region region;
     private List<Beacon> beaconSet;
     private ArrayAdapter<String> adapter;
+    private ListView listView;
 
     public static final String TAG = "ChooseBeaconActivityTag";
 
@@ -38,7 +42,7 @@ public class ChooseBeaconActivity extends AppCompatActivity implements BeaconMan
         beaconSet = new ArrayList<>();
         ArrayList<String> beaconsIds = new ArrayList<>();
         beaconsIds.add("");
-        ListView listView = (ListView) findViewById(R.id.list_view);
+        listView = (ListView) findViewById(R.id.list_view);
         listView.getHeight();
         adapter = new ArrayAdapter<>(this, R.layout.list_view_item, beaconsIds);
         listView.setAdapter(adapter);
@@ -55,6 +59,16 @@ public class ChooseBeaconActivity extends AppCompatActivity implements BeaconMan
             }
         }
 
+    }
+
+    public void listItemClick(View view) {
+        int pos = listView.getPositionForView(view);
+        Beacon beaconSelected = beaconSet.get(pos);
+        int [] beaconID = {beaconSelected.getMajor(), beaconSelected.getMinor()};
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra(SELECTED_BEACON, beaconID);
+        setResult(Activity.RESULT_OK, resultIntent);
+        this.finish();
     }
 
     @Override
