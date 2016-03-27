@@ -18,7 +18,7 @@ public class BaseRouteActivity extends AppCompatActivity {
     private ListView listView;
     private ArrayAdapter<String> adapter;
     private ArrayList<String> routeNames;
-    public String TAG = "BaseRouteActivity";
+    public String BASE_ROUTE_TAG = "BaseRouteActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +54,7 @@ public class BaseRouteActivity extends AppCompatActivity {
                 String receiveString = "";
 
                 while ((receiveString = bufferedReader.readLine()) != null) {
-                    Log.d(TAG, receiveString);
+                    Log.d(BASE_ROUTE_TAG, receiveString);
                     String[] split1 = receiveString.split("\\.");
                     String name = split1[1];
                     int i;

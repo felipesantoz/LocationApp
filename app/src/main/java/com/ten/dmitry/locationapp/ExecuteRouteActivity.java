@@ -26,9 +26,9 @@ public class ExecuteRouteActivity extends AppCompatActivity implements BeaconMan
     private BeaconManager beaconManager;
     private BeaconRoute route;
     private Integer nextMajor;
-    TextToSpeech ttsObject;
-    int result;
-    final static String TAG = "RouteActivity";
+    private TextToSpeech ttsObject;
+    private int result;
+    final static String EXECUTE_ROUTE_TAG = "ExecuteRouteActivityTag";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +94,7 @@ public class ExecuteRouteActivity extends AppCompatActivity implements BeaconMan
         startRangingForBeacon(nextMajor);
     }
 
-    private void startRangingForBeacon(int major){
+    private void startRangingForBeacon(int major) {
         Region region = new Region(
                 "monitored region",
                 UUID.fromString("B9407F30-F5F8-466E-AFF9-25556B57FE6D"),
@@ -105,7 +105,7 @@ public class ExecuteRouteActivity extends AppCompatActivity implements BeaconMan
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onBeaconsDiscovered(Region region, List<Beacon> list) {
-        Log.d(TAG, "It works");
+        Log.d(EXECUTE_ROUTE_TAG, "It works");
         for (Beacon b : list) {
             if (b.getMajor() == nextMajor) {
                 if (calculateAccuracy(b.getMeasuredPower(), b.getRssi()) < 1) {

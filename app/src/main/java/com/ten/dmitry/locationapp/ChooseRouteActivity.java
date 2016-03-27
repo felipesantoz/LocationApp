@@ -6,7 +6,7 @@ import android.view.View;
 
 public class ChooseRouteActivity extends BaseRouteActivity{
     public static final String SELECTED_ROUTE_USER = "ChooseRouteActivityRoute";
-    public static final String TAG = "ManageRoute:";
+    public static final String CHOOSE_ROUTE_TAG = "ChooseRouteActivityTag";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
