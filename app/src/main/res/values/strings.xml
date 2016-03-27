@@ -20,4 +20,5 @@
     <string name="find_beacons">Place Your Phone Near a Beacon To Assign a New Instruction</string>
     <string name="delete">Delete</string>
     <string name="close">Close</string>
+    <string name="execute_route_starting">Move to the starting point of the route</string>
 </resources>

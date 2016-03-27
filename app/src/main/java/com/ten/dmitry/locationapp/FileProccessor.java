@@ -85,7 +85,7 @@ public class FileProccessor {
                 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.
                         openFileOutput(fileName, Context.MODE_APPEND));
                 for (String line : tempStorage) {
-                    outputStreamWriter.write(line);
+                    outputStreamWriter.write(line + "\n");
                 }
                 outputStreamWriter.close();
             } catch (IOException e) {

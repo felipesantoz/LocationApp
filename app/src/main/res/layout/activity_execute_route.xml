@@ -15,5 +15,6 @@
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:textSize="24sp"
+        android:text="@string/execute_route_starting"
         />
 </RelativeLayout>
