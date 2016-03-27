@@ -28,6 +28,7 @@ public class ExecuteRouteActivity extends AppCompatActivity implements BeaconMan
     private BeaconManager beaconManager;
     private Region rangeRegion = null;
     private BeaconRoute route;
+    private boolean detachedHasNext;
     private Integer nextMajor, currentMajor;
     private TextToSpeech ttsObject;
     private TextView textView;
@@ -46,6 +47,19 @@ public class ExecuteRouteActivity extends AppCompatActivity implements BeaconMan
                 @Override
                 public void run() {
                     speak(currentMajor);
+                }
+            });
+            speech_thread.start();
+        }
+    };
+
+    private final Runnable finishRunner = new Runnable(){
+        @Override
+        public void run(){
+            final Thread speech_thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    finish();
                 }
             });
             speech_thread.start();
@@ -156,21 +170,24 @@ public class ExecuteRouteActivity extends AppCompatActivity implements BeaconMan
     public void onBeaconsDiscovered(Region region, List<Beacon> list) {
         for (Beacon b : list) {
             if (b.getMajor() == nextMajor) {
-                if (calculateAccuracy(b.getMeasuredPower(), b.getRssi()) < 1) {
+                if (calculateAccuracy(b.getMeasuredPower(), b.getRssi()) < 1.5) {
                     textView.setText(route.getMessage(nextMajor));
                     if (result == TextToSpeech.LANG_NOT_SUPPORTED || result == TextToSpeech.LANG_MISSING_DATA)
                         Toast.makeText(getApplicationContext(), "Feature Not Supported in Your Device",
                                 Toast.LENGTH_SHORT).show();
                     else {
                         currentMajor = nextMajor;
+                        detachedHasNext = route.hasNext();
                         handler.post(loadRunner);
                     }
                     if (route.hasNext()) {
                         nextMajor = route.getNextBeaconMajor();
                         startRangingForBeacon(nextMajor);
                     }
-                    else
-                        finish();
+                    else{
+                        nextMajor = -1;
+                        handler.postDelayed(finishRunner, 2000);
+                    }
                 }
             }
         }
