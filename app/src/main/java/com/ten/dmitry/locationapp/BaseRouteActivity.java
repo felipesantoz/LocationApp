@@ -48,7 +48,7 @@ public class BaseRouteActivity extends AppCompatActivity {
     public void fillListFromFile() {
         String ret = "";
         try {
-            InputStream inputStream = openFileInput("Routes.txt");
+            InputStream inputStream = openFileInput("beaconsRecorded.txt");
 
             if (inputStream != null) {
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);

@@ -11,8 +11,16 @@
     tools:context="com.ten.dmitry.locationapp.CreateRouteActivity">
 
     <TextView
+        android:id="@+id/textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/find_beacons"/>
+   <Button
+       android:layout_below="@id/textview"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:text="@string/finish_route"
+       android:onClick="finishCreatingRoute"
+       />
 
 </RelativeLayout>

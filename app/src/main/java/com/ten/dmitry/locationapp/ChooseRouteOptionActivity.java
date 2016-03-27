@@ -34,7 +34,7 @@ public class ChooseRouteOptionActivity extends AppCompatActivity implements Adap
         if (!message.equals("Cancel")) {
             try {
                 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(this.
-                        openFileOutput("Routes.txt", Context.MODE_APPEND));
+                        openFileOutput("beaconsRecorded.txt", Context.MODE_APPEND));
                 outputStreamWriter.write(major + "/" + message + ",");
                 outputStreamWriter.close();
             } catch (IOException e) {

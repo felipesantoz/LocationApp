@@ -2,7 +2,6 @@ package com.ten.dmitry.locationapp;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class BeaconRoute {
     private List<Object []> beaconMessages;
@@ -25,11 +24,13 @@ public class BeaconRoute {
 
     public BeaconRoute(String name){
         this.name = name;
+        stringRep = name + "\n";
         beaconMessages = new ArrayList<>();
     }
 
     public void addBeacon(Integer beaconMajor, String message) {
         Object [] BeaconInfo = {beaconMajor, message};
+        stringRep += beaconMajor + ":" + message + "\n";
         beaconMessages.add(BeaconInfo);
     }
 

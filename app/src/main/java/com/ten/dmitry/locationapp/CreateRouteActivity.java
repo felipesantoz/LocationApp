@@ -1,19 +1,15 @@
 package com.ten.dmitry.locationapp;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
 
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,19 +27,33 @@ public class CreateRouteActivity extends AppCompatActivity implements BeaconMana
         // initializing beacon manager and listener
         beaconManager = new BeaconManager(getApplicationContext());
         beaconManager.setRangingListener(this);
-
-    }
-
-    public void onResume() {
-        super.onResume();
         // starting looking for all beacons in the range
         searchRegion = new Region(
                 "monitored region",
                 UUID.fromString("B9407F30-F5F8-466E-AFF9-25556B57FE6D"),
                 null, null);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // starting looking for all beacons in the rang
+        beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
+            @Override
+            public void onServiceReady() {
+                beaconManager.startRanging(searchRegion);
+            }
+        });
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        // starting looking for all beacons in the range
         beaconManager.startRanging(searchRegion);
     }
 
+    @Override
     public void onPause() {
         super.onPause();
         beaconManager.stopRanging(searchRegion);
@@ -51,6 +61,7 @@ public class CreateRouteActivity extends AppCompatActivity implements BeaconMana
 
     @Override
     public void onBeaconsDiscovered(Region region, List<Beacon> list) {
+        Log.d("tag", "BEACON");
         // the beacon, that is considered to be closest to the device is selected.
         Beacon b = list.get(0);
         // setting up directions for the beacon, if it is close enough
@@ -84,15 +95,6 @@ public class CreateRouteActivity extends AppCompatActivity implements BeaconMana
      * @param view the view that was activated. Button in this case.
      */
     public void finishCreatingRoute(View view) {
-        EditText routeNameEditor = (EditText) findViewById(R.id.route_name_input);
-        String name = routeNameEditor.getText().toString();
-        try {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(this.openFileOutput("Routes.txt", Context.MODE_APPEND));
-            outputStreamWriter.write("." + name + "\n");
-            outputStreamWriter.close();
-        } catch (IOException e) {
-            Log.e("Exception", "File write failed: " + e.toString());
-        }
         finish();
     }
 }

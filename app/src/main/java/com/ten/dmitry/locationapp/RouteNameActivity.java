@@ -3,10 +3,7 @@ package com.ten.dmitry.locationapp;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -34,7 +31,7 @@ public class RouteNameActivity extends AppCompatActivity {
         EditText routeNameEditor = (EditText)findViewById(R.id.route_name_input);
         String name = routeNameEditor.getText().toString();
         try {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(this.openFileOutput("Routes.txt", Context.MODE_APPEND));
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(this.openFileOutput("beaconsRecorded.txt", Context.MODE_APPEND));
             outputStreamWriter.write("." + name + "\n");
             outputStreamWriter.close();
         }

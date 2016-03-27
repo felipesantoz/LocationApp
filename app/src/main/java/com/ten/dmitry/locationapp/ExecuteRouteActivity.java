@@ -28,8 +28,9 @@ public class ExecuteRouteActivity extends AppCompatActivity implements BeaconMan
     private BeaconManager beaconManager;
     private Region rangeRegion = null;
     private BeaconRoute route;
-    private Integer nextMajor;
+    private Integer nextMajor, currentMajor;
     private TextToSpeech ttsObject;
+    private TextView textView;
     private int result;
     final static String EXECUTE_ROUTE_TAG = "ExecuteRouteActivityTag";
 
@@ -44,7 +45,7 @@ public class ExecuteRouteActivity extends AppCompatActivity implements BeaconMan
             final Thread speech_thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    speak();
+                    speak(currentMajor);
                 }
             });
             speech_thread.start();
@@ -64,8 +65,7 @@ public class ExecuteRouteActivity extends AppCompatActivity implements BeaconMan
         String routeName = getIntent().getStringExtra(ChooseRouteActivity.SELECTED_ROUTE_USER);
         initRoute(routeName);
 
-        TextView textView = (TextView)findViewById(R.id.command_list);
-        textView.setText(route.toString());
+        textView = (TextView)findViewById(R.id.command_list);
 
         // initializing text to speech program.
         ttsObject = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
@@ -92,7 +92,7 @@ public class ExecuteRouteActivity extends AppCompatActivity implements BeaconMan
     private void initRoute(String routeName) {
         route = new BeaconRoute(routeName);
         try {
-            InputStream inputStream = openFileInput("Routes.txt");
+            InputStream inputStream = openFileInput("beaconsRecorded.txt");
 
             if (inputStream != null) {
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
@@ -137,7 +137,12 @@ public class ExecuteRouteActivity extends AppCompatActivity implements BeaconMan
                 "monitored region",
                 UUID.fromString("B9407F30-F5F8-466E-AFF9-25556B57FE6D"),
                 major, null);
-        beaconManager.startRanging(rangeRegion);
+        beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
+            @Override
+            public void onServiceReady() {
+                beaconManager.startRanging(rangeRegion);
+            }
+        });
     }
 
     @Override
@@ -149,18 +154,23 @@ public class ExecuteRouteActivity extends AppCompatActivity implements BeaconMan
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onBeaconsDiscovered(Region region, List<Beacon> list) {
-        Log.d(EXECUTE_ROUTE_TAG, "It works");
         for (Beacon b : list) {
             if (b.getMajor() == nextMajor) {
                 if (calculateAccuracy(b.getMeasuredPower(), b.getRssi()) < 1) {
+                    textView.setText(route.getMessage(nextMajor));
                     if (result == TextToSpeech.LANG_NOT_SUPPORTED || result == TextToSpeech.LANG_MISSING_DATA)
                         Toast.makeText(getApplicationContext(), "Feature Not Supported in Your Device",
                                 Toast.LENGTH_SHORT).show();
                     else {
+                        currentMajor = nextMajor;
                         handler.post(loadRunner);
                     }
-                    if (route.hasNext())
+                    if (route.hasNext()) {
                         nextMajor = route.getNextBeaconMajor();
+                        startRangingForBeacon(nextMajor);
+                    }
+                    else
+                        finish();
                 }
             }
         }
@@ -180,9 +190,9 @@ public class ExecuteRouteActivity extends AppCompatActivity implements BeaconMan
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void speak() {
-        ttsObject.speak(route.getMessage(nextMajor), TextToSpeech.QUEUE_FLUSH,
-                null, route.getName() + "." + nextMajor);
+    private void speak(int currentMajor) {
+        ttsObject.speak(route.getMessage(currentMajor), TextToSpeech.QUEUE_FLUSH,
+                null, route.getName() + "." + currentMajor);
         handler.removeCallbacks(loadRunner);
     }
 }
