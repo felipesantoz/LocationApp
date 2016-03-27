@@ -16,4 +16,20 @@
         android:textAlignment="center"
         android:textSize="24sp"
         />
+    <Button
+        android:id="@+id/delete_route_btn"
+        android:layout_below="@id/command_list_for_admin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/delete"
+        android:onClick="deleteRoute"
+        />
+    <Button
+        android:id="@+id/close_activity_btn"
+        android:layout_below="@id/delete_route_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/close"
+        android:onClick="closeActivity"
+        />
 </RelativeLayout>

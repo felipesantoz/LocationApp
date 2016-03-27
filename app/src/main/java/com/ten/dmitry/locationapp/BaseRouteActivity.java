@@ -77,4 +77,8 @@ public class BaseRouteActivity extends AppCompatActivity {
             Log.e("login activity", "Can not read file: " + e.toString());
         }
     }
+
+    protected ListView getListView(){
+        return listView;
+    }
 }

@@ -3,6 +3,7 @@ package com.ten.dmitry.locationapp;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import java.io.BufferedReader;
@@ -14,13 +15,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EditRouteActivity extends AppCompatActivity {
+    private String routeName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_route);
         TextView display = (TextView)findViewById(R.id.command_list_for_admin);
-        String routeName = getIntent().getStringExtra(ManageRouteActivity.SELECTED_ROUTE_ADMIN);
+        routeName = getIntent().getStringExtra(ManageRouteActivity.SELECTED_ROUTE_ADMIN);
         display.setText(getDirections(routeName));
     }
 
@@ -59,5 +61,14 @@ public class EditRouteActivity extends AppCompatActivity {
             Log.e("login activity", "Can not read file: " + e.toString());
         }
         return route.toString();
+    }
+
+    public void deleteRoute(View view){
+        FileProccessor.deleteLine(this, "beaconsRecorded.txt", routeName);
+        finish();
+    }
+
+    public void closeActivity(View view){
+        finish();
     }
 }

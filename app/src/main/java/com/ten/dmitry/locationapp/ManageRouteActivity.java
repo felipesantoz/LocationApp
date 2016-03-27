@@ -3,6 +3,7 @@ package com.ten.dmitry.locationapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 
 public class ManageRouteActivity extends BaseRouteActivity {
@@ -16,6 +17,11 @@ public class ManageRouteActivity extends BaseRouteActivity {
         createRoute.setVisibility(View.VISIBLE);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((ArrayAdapter)getListView().getAdapter()).notifyDataSetChanged();
+    }
     public void onListItemSelected(View view) {
         String selectedRouteName = super.getSelectedRouteName(view);
         Intent startRouteIntent = new Intent(this, EditRouteActivity.class);

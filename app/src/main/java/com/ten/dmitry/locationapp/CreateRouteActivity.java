@@ -63,16 +63,21 @@ public class CreateRouteActivity extends AppCompatActivity implements BeaconMana
     public void onBeaconsDiscovered(Region region, List<Beacon> list) {
         Log.d("tag", "BEACON");
         // the beacon, that is considered to be closest to the device is selected.
-        Beacon b = list.get(0);
-        // setting up directions for the beacon, if it is close enough
-        if (calculateAccuracy(b.getMeasuredPower(), b.getRssi()) < 0.3 && !b.equals(lastBeacon)) {
-            Intent intent = new Intent(this, ChooseRouteOptionActivity.class);
-            intent.putExtra("MAJOR", b.getMajor());
-            lastBeacon = b;
-            startActivity(intent);
-        } else if (!(calculateAccuracy(b.getMeasuredPower(), b.getRssi()) < 0.3) && b.equals(lastBeacon))
-            lastBeacon = null;
+        try {
+            Beacon b = list.get(0);
+            // setting up directions for the beacon, if it is close enough
+            if (calculateAccuracy(b.getMeasuredPower(), b.getRssi()) < 0.3 && !b.equals(lastBeacon)) {
+                Intent intent = new Intent(this, ChooseRouteOptionActivity.class);
+                intent.putExtra("MAJOR", b.getMajor());
+                lastBeacon = b;
+                startActivity(intent);
+            } else if (!(calculateAccuracy(b.getMeasuredPower(), b.getRssi()) < 0.3) && b.equals(lastBeacon))
+                lastBeacon = null;
 
+        }
+        catch(IndexOutOfBoundsException e) {
+            Log.d("TAG", "Unexpected Error");
+        }
     }
 
     protected static double calculateAccuracy(int txPower, double rssi) {
