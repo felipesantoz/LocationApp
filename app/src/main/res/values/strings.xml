@@ -16,4 +16,6 @@
     <string name="major">Major: </string>
     <string name="finish_route">Done</string>
     <string name="routename_hint">Enter route name...</string>
+    <string name="title_activity_route_name">RouteNameActivity</string>
+    <string name="find_beacons">Place Your Phone Near a Beacon To Assign a New Instruction</string>
 </resources>

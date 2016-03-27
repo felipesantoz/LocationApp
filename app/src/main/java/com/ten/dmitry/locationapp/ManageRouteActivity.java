@@ -8,7 +8,6 @@ import android.widget.Button;
 public class ManageRouteActivity extends BaseRouteActivity {
 
     public static final String SELECTED_ROUTE_ADMIN = "ManageRouteActivityRoute";
-    public static final String TAG = "ManageRoute:";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +24,7 @@ public class ManageRouteActivity extends BaseRouteActivity {
     }
 
     public void createNewTask(View view) {
-        Intent createRouteIntent = new Intent(this, CreateRouteActivity.class);
+        Intent createRouteIntent = new Intent(this, RouteNameActivity.class);
         startActivity(createRouteIntent);
     }
 }
