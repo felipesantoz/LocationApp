@@ -3,6 +3,7 @@ package com.ten.dmitry.locationapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
 public class ManageRouteActivity extends BaseRouteActivity {
 
@@ -12,7 +13,8 @@ public class ManageRouteActivity extends BaseRouteActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_manage_route);
+        Button createRoute = (Button)findViewById(R.id.create_route_btn);
+        createRoute.setVisibility(View.VISIBLE);
     }
 
     public void onListItemSelected(View view) {

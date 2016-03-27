@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class BaseRouteActivity extends AppCompatActivity {
+    public static final Integer MANAGER_MODE = 0, USER_MODE = 1;
     private ListView listView;
     private ArrayAdapter<String> adapter;
     private ArrayList<String> routeNames;
@@ -31,19 +32,20 @@ public class BaseRouteActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(this, R.layout.list_view_item, routeNames);
         listView.setAdapter(adapter);
     }
+
     @Override
     public void onResume() {
         super.onResume();
         fillListFromFile();
     }
 
-    public String getSelectedRouteName(View view){
+    public String getSelectedRouteName(View view) {
         int pos = listView.getPositionForView(view);
         String selectedRouteName = adapter.getItem(pos);
         return selectedRouteName;
     }
 
-    public void fillListFromFile(){
+    public void fillListFromFile() {
         String ret = "";
         try {
             InputStream inputStream = openFileInput("Routes.txt");
@@ -58,11 +60,16 @@ public class BaseRouteActivity extends AppCompatActivity {
                     String[] split1 = receiveString.split("\\.");
                     String name = split1[1];
                     int i;
-                    for (i = 0; i < adapter.getCount(); i++)
+                    for (i = 0; i < adapter.getCount(); i++) {
+                        Log.d("ADAPTER:" + BASE_ROUTE_TAG, adapter.getItem(i));
                         if (adapter.getItem(i).equals(name))
                             break;
-                    if (i == adapter.getCount())
+                    }
+
+                    if (i == adapter.getCount()) {
                         adapter.add(name);
+                        adapter.notifyDataSetChanged();
+                    }
                 }
                 inputStream.close();
             }

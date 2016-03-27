@@ -11,8 +11,8 @@ public class ChooseRouteActivity extends BaseRouteActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_choose_route2);
     }
+
 
     public void onListItemSelected(View view) {
         String selectedRouteName = super.getSelectedRouteName(view);
