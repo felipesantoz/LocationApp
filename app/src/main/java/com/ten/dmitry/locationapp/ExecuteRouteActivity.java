@@ -96,19 +96,22 @@ public class ExecuteRouteActivity extends AppCompatActivity implements BeaconMan
                 String receiveString = "";
 
                 while ((receiveString = bufferedReader.readLine()) != null) {
+                    Log.d(EXECUTE_ROUTE_TAG, receiveString);
                     String[] split1 = receiveString.split("\\.");
                     String name = split1[1];
-                    List<Integer> majorList = new ArrayList<>();
-                    String[] split2 = split1[0].split(",");
-                    String[] messages = new String[split2.length];
-                    for (int i = 0; i < split2.length; i++) {
-                        String[] split3 = split2[i].split("/");
-                        majorList.add(Integer.parseInt(split3[0]));
-                        messages[i] = split3[1];
-                    }
-                    if (name.equals(routeName))
+                    if (name.equals(routeName)) {
+                        List<Integer> majorList = new ArrayList<>();
+                        String[] split2 = split1[0].split(",");
+                        String[] messages = new String[split2.length];
+                        for (int i = 0; i < split2.length; i++) {
+                            String[] split3 = split2[i].split("/");
+                            majorList.add(Integer.parseInt(split3[0]));
+                            messages[i] = split3[1];
+                        }
                         for (int i = 0; i < majorList.size(); i++)
                             route.addBeacon(majorList.get(i), messages[i]);
+                        break;
+                    }
                 }
                 inputStream.close();
             }

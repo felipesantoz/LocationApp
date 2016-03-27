@@ -56,12 +56,10 @@ public class BaseRouteActivity extends AppCompatActivity {
                 String receiveString;
 
                 while ((receiveString = bufferedReader.readLine()) != null) {
-                    Log.d(BASE_ROUTE_TAG, receiveString);
                     String[] split1 = receiveString.split("\\.");
                     String name = split1[1];
                     int i;
                     for (i = 0; i < adapter.getCount(); i++) {
-                        Log.d("ADAPTER:" + BASE_ROUTE_TAG, adapter.getItem(i));
                         if (adapter.getItem(i).equals(name))
                             break;
                     }

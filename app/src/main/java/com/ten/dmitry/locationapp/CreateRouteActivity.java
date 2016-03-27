@@ -44,7 +44,7 @@ public class CreateRouteActivity extends AppCompatActivity implements BeaconMana
         beaconManager.startRanging(searchRegion);
     }
 
-    public void onPause(){
+    public void onPause() {
         super.onPause();
         beaconManager.stopRanging(searchRegion);
     }
@@ -59,9 +59,8 @@ public class CreateRouteActivity extends AppCompatActivity implements BeaconMana
             intent.putExtra("MAJOR", b.getMajor());
             lastBeacon = b;
             startActivity(intent);
-        }
-        else if(!(calculateAccuracy(b.getMeasuredPower(), b.getRssi()) < 0.3) && b.equals(lastBeacon))
-            lastBeacon=null;
+        } else if (!(calculateAccuracy(b.getMeasuredPower(), b.getRssi()) < 0.3) && b.equals(lastBeacon))
+            lastBeacon = null;
 
     }
 
@@ -84,15 +83,14 @@ public class CreateRouteActivity extends AppCompatActivity implements BeaconMana
      *
      * @param view the view that was activated. Button in this case.
      */
-    public void finishCreatingRoute(View view){
-        EditText routeNameEditor = (EditText)findViewById(R.id.route_name_input);
+    public void finishCreatingRoute(View view) {
+        EditText routeNameEditor = (EditText) findViewById(R.id.route_name_input);
         String name = routeNameEditor.getText().toString();
         try {
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(this.openFileOutput("Routes.txt", Context.MODE_APPEND));
             outputStreamWriter.write("." + name + "\n");
             outputStreamWriter.close();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Log.e("Exception", "File write failed: " + e.toString());
         }
         finish();
