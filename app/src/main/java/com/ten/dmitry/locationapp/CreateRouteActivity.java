@@ -19,54 +19,41 @@ import java.util.UUID;
 
 public class CreateRouteActivity extends AppCompatActivity implements BeaconManager.RangingListener {
 
-    BeaconManager beaconManager;
-    Beacon lastBeacon;
+    private BeaconManager beaconManager;
+    private Region searchRegion;
+    private Beacon lastBeacon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_route);
 
+        // initializing beacon manager and listener
         beaconManager = new BeaconManager(getApplicationContext());
         beaconManager.setRangingListener(this);
 
     }
 
-    public void onStart() {
-        super.onStart();
-        beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
-            @Override
-            public void onServiceReady() {
-                Region region = new Region(
-                        "monitored region",
-                        UUID.fromString("B9407F30-F5F8-466E-AFF9-25556B57FE6D"),
-                        null, null);
-                beaconManager.startRanging(region);
-            }
-        });
-    }
-
     public void onResume() {
         super.onResume();
-        Region region = new Region(
+        // starting looking for all beacons in the range
+        searchRegion = new Region(
                 "monitored region",
                 UUID.fromString("B9407F30-F5F8-466E-AFF9-25556B57FE6D"),
                 null, null);
-        beaconManager.startRanging(region);
+        beaconManager.startRanging(searchRegion);
     }
 
     public void onPause(){
         super.onPause();
-        Region region = new Region(
-                "monitored region",
-                UUID.fromString("B9407F30-F5F8-466E-AFF9-25556B57FE6D"),
-                null, null);
-        beaconManager.stopRanging(region);
+        beaconManager.stopRanging(searchRegion);
     }
 
     @Override
     public void onBeaconsDiscovered(Region region, List<Beacon> list) {
+        // the beacon, that is considered to be closest to the device is selected.
         Beacon b = list.get(0);
+        // setting up directions for the beacon, if it is close enough
         if (calculateAccuracy(b.getMeasuredPower(), b.getRssi()) < 0.3 && !b.equals(lastBeacon)) {
             Intent intent = new Intent(this, ChooseRouteOptionActivity.class);
             intent.putExtra("MAJOR", b.getMajor());
@@ -91,6 +78,12 @@ public class CreateRouteActivity extends AppCompatActivity implements BeaconMana
         }
     }
 
+    /**
+     * onClick method of the "Done" button. Saves the name of the route to the file and finishes
+     * creating a new route.
+     *
+     * @param view the view that was activated. Button in this case.
+     */
     public void finishCreatingRoute(View view){
         EditText routeNameEditor = (EditText)findViewById(R.id.route_name_input);
         String name = routeNameEditor.getText().toString();

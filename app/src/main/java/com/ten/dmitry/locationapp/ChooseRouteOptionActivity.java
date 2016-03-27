@@ -20,7 +20,7 @@ public class ChooseRouteOptionActivity extends AppCompatActivity implements Adap
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_route_option);
-        TextView label = (TextView)findViewById(R.id.major_label);
+        TextView label = (TextView) findViewById(R.id.major_label);
         major = getIntent().getIntExtra("MAJOR", -1);
         label.setText(label.getText() + Integer.toString(major));
         ListView listView;
@@ -46,11 +46,11 @@ public class ChooseRouteOptionActivity extends AppCompatActivity implements Adap
                 System.err.println(e.getMessage());
             }*/
             try {
-                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(this.openFileOutput("Routes.txt", Context.MODE_APPEND));
+                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(this.
+                        openFileOutput("Routes.txt", Context.MODE_APPEND));
                 outputStreamWriter.write(major + "/" + message + ",");
                 outputStreamWriter.close();
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 Log.e("Exception", "File write failed: " + e.toString());
             }
         }

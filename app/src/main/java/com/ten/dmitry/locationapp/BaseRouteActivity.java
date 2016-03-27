@@ -51,7 +51,7 @@ public class BaseRouteActivity extends AppCompatActivity {
             if (inputStream != null) {
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                String receiveString = "";
+                String receiveString;
 
                 while ((receiveString = bufferedReader.readLine()) != null) {
                     Log.d(BASE_ROUTE_TAG, receiveString);
