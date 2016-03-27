@@ -1,5 +1,6 @@
 package com.ten.dmitry.locationapp;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -12,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
 public class BaseRouteActivity extends AppCompatActivity {
@@ -43,7 +45,7 @@ public class BaseRouteActivity extends AppCompatActivity {
         return selectedRouteName;
     }
 
-    public void fillListFromFile(){
+    public void fillListFromFile() {
         String ret = "";
         try {
             InputStream inputStream = openFileInput("Routes.txt");
@@ -61,13 +63,24 @@ public class BaseRouteActivity extends AppCompatActivity {
                     for (i = 0; i < adapter.getCount(); i++)
                         if (adapter.getItem(i).equals(name))
                             break;
+
                     if (i == adapter.getCount())
                         adapter.add(name);
-                }
+
+                    }
                 inputStream.close();
             }
         } catch (FileNotFoundException e) {
-            Log.e("login activity", "File not found: " + e.toString());
+            OutputStreamWriter outputStreamWriter = null;
+            try {
+                outputStreamWriter = new OutputStreamWriter(this.openFileOutput("Routes.txt", Context.MODE_APPEND));
+                outputStreamWriter.close();
+            } catch (FileNotFoundException e1) {
+                e1.printStackTrace();
+            }
+         catch (IOException e1) {
+            e1.printStackTrace();
+        }
         } catch (IOException e) {
             Log.e("login activity", "Can not read file: " + e.toString());
         }

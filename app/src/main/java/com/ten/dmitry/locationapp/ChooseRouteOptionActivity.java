@@ -32,19 +32,6 @@ public class ChooseRouteOptionActivity extends AppCompatActivity implements Adap
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         String message = ((TextView) view).getText().toString();
         if (!message.equals("Cancel")) {
-            /*String FILENAME = "beacons.txt";
-            FileOutputStream fos = null;
-            try {
-                fos = openFileOutput(FILENAME, Context.MODE_WORLD_READABLE);
-            } catch (FileNotFoundException e) {
-                System.err.println(e.getMessage());
-            }
-            try {
-                fos.write((Integer.toString(major) + "/" + message + ",").getBytes());
-                fos.close();
-            } catch (IOException e) {
-                System.err.println(e.getMessage());
-            }*/
             try {
                 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(this.
                         openFileOutput("Routes.txt", Context.MODE_APPEND));

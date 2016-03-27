@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                tools:context="com.ten.dmitry.locationapp.MainActivity"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+    >
+
+    <EditText
+        android:id="@+id/route_name_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:hint="@string/routename_hint"
+        />
+    <Button
+        android:id="@+id/next_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_below="@id/route_name_input"
+        android:gravity="bottom"
+        android:text="NEXT"
+        android:onClick="goToNextStep"
+        />
+    <Button
+        android:id="@+id/done_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_below="@id/next_btn"
+        android:gravity="bottom"
+        android:text="@string/finish_route"
+        android:onClick="finishCreatingRoute"
+        />
+
+
+
+</RelativeLayout>
