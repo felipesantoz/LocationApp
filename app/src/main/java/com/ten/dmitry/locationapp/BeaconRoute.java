@@ -2,18 +2,21 @@ package com.ten.dmitry.locationapp;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class BeaconRoute {
     private List<Object []> beaconMessages;
-    private String name;
+    private String name, stringRep;
     private int currentMajorIndex = 0;
 
 
     public BeaconRoute(String name, List<Integer> beaconMajors, String[] messages) {
         this.name = name;
+        stringRep = name + "\n";
         beaconMessages = new ArrayList<>();
         int i = 0;
         for (Integer bM : beaconMajors) {
+            stringRep += bM + ":" + messages[i] + "\n";
             Object [] BeaconInfo = {bM, messages[i]};
             beaconMessages.add(BeaconInfo);
             i++;
@@ -53,5 +56,9 @@ public class BeaconRoute {
 
     public boolean hasNext(){
         return currentMajorIndex < beaconMessages.size();
+    }
+
+    public String toString(){
+        return stringRep;
     }
 }

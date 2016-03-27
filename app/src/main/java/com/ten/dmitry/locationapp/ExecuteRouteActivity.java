@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.estimote.sdk.Beacon;
@@ -62,6 +63,9 @@ public class ExecuteRouteActivity extends AppCompatActivity implements BeaconMan
         // initializing the route to be executed.
         String routeName = getIntent().getStringExtra(ChooseRouteActivity.SELECTED_ROUTE_USER);
         initRoute(routeName);
+
+        TextView textView = (TextView)findViewById(R.id.command_list);
+        textView.setText(route.toString());
 
         // initializing text to speech program.
         ttsObject = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
