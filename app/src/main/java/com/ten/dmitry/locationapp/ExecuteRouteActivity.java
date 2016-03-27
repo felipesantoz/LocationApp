@@ -22,13 +22,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-/*
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;*/
-
 public class ExecuteRouteActivity extends AppCompatActivity implements BeaconManager.RangingListener {
     private BeaconManager beaconManager;
     private BeaconRoute route;
@@ -41,7 +34,6 @@ public class ExecuteRouteActivity extends AppCompatActivity implements BeaconMan
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_execute_route);
-
 
         beaconManager = new BeaconManager(getApplicationContext());
         beaconManager.setRangingListener(this);
@@ -97,47 +89,18 @@ public class ExecuteRouteActivity extends AppCompatActivity implements BeaconMan
         });
     }
 
-    public void onStart() {
-        super.onStart();
-        beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
-            @Override
-            public void onServiceReady() {
-                Region region = new Region(
-                        "monitored region",
-                        UUID.fromString("B9407F30-F5F8-466E-AFF9-25556B57FE6D"),
-                        null, null);
-                beaconManager.startRanging(region);
-            }
-        });
-    }
-
     public void onResume() {
         super.onResume();
+        startRangingForBeacon(nextMajor);
+    }
+
+    private void startRangingForBeacon(int major){
         Region region = new Region(
                 "monitored region",
                 UUID.fromString("B9407F30-F5F8-466E-AFF9-25556B57FE6D"),
-                null, null);
+                major, null);
         beaconManager.startRanging(region);
     }
-
-    /*
-    public void showNotification(String title, String message) {
-        Intent notifyIntent = new Intent(this, MainActivity.class);
-        notifyIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivities(this, 0,
-                new Intent[]{notifyIntent}, PendingIntent.FLAG_UPDATE_CURRENT);
-        Notification notification = new Notification.Builder(this)
-                .setSmallIcon(android.R.drawable.ic_dialog_info)
-                .setContentTitle(title)
-                .setContentText(message)
-                .setAutoCancel(true)
-                .setContentIntent(pendingIntent)
-                .build();
-        notification.defaults |= Notification.DEFAULT_SOUND;
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(1, notification);
-    }*/
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
